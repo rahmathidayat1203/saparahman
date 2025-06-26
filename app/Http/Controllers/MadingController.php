@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\KategoriMading;
-use App\Models\Mading;
-use App\Models\mading as ModelsMading;
+use App\Models\mading;
 use App\Models\MasterAsas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +15,7 @@ class MadingController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Mading::latest();
+            $data = mading::latest();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('gambar', function ($row) {
@@ -45,7 +44,7 @@ class MadingController extends Controller
     public function mading_by_id($id)
     {
         try {
-            $mading = Mading::with('kategori')->find($id);
+            $mading = mading::with('kategori')->find($id);
 
             if (!$mading) {
                 return response()->json([
@@ -85,7 +84,7 @@ class MadingController extends Controller
     public function get_all_mading(Request $request)
     {
         try {
-            $madings = Mading::with('kategori')->get();
+            $madings = mading::with('kategori')->get();
 
             // Kelompokkan berdasarkan nama kategori
             $grouped = $madings->groupBy(function ($item) {
@@ -145,7 +144,7 @@ class MadingController extends Controller
 
         $validated['created_by'] = 1;
 
-        $mading = Mading::create($validated);
+        $mading = mading::create($validated);
 
         return redirect()->route('mading.index')->with('success', 'Data berhasil ditambahkan');
     }
@@ -193,7 +192,7 @@ class MadingController extends Controller
 
     public function destroy($id)
     {
-        $mading = Mading::findOrFail($id);
+        $mading = mading::findOrFail($id);
         $mading->deleted_by = 1;
         $mading->save();
         $mading->delete();
