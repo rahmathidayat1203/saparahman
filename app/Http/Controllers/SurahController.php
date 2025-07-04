@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Surah;
+use App\Models\surah;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -11,7 +11,7 @@ class SurahController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Surah::select('*');
+            $data = surah::select('*');
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -47,7 +47,7 @@ class SurahController extends Controller
             'jml_ayat' => 'required|integer',
         ]);
 
-        Surah::create([
+        surah::create([
             'nama_surah' => $request->nama_surah,
             'arti_surah' => $request->arti_surah,
             'jml_ayat' => $request->jml_ayat,
@@ -57,17 +57,17 @@ class SurahController extends Controller
         return redirect()->route('surah.index')->with('success', 'Surah berhasil disimpan.');
     }
 
-    public function show(Surah $surah)
+    public function show(surah $surah)
     {
         return view('surah.show', compact('surah'));
     }
 
-    public function edit(Surah $surah)
+    public function edit(surah $surah)
     {
         return view('surah.edit', compact('surah'));
     }
 
-    public function update(Request $request, Surah $surah)
+    public function update(Request $request, surah $surah)
     {
         $request->validate([
             'nama_surah' => 'required|string',
@@ -85,7 +85,7 @@ class SurahController extends Controller
         return redirect()->route('surah.index')->with('success', 'Surah berhasil diperbarui.');
     }
 
-    public function destroy(Surah $surah)
+    public function destroy(surah $surah)
     {
         $surah->update(['deleted_by' => 1]);
         $surah->delete();

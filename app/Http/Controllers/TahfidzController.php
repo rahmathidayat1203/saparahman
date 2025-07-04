@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tahfidz;
+use App\Models\tahfidz;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -11,7 +11,7 @@ class TahfidzController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Tahfidz::select('*');
+            $data = tahfidz::select('*');
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -47,7 +47,7 @@ class TahfidzController extends Controller
             'juz_ayat' => 'required|string',
         ]);
 
-        Tahfidz::create([
+        tahfidz::create([
             'jenis_tahfidz' => $request->jenis_tahfidz,
             'arti' => $request->arti,
             'juz_ayat' => $request->juz_ayat,
@@ -57,17 +57,17 @@ class TahfidzController extends Controller
         return redirect()->route('tahfidz.index')->with('success', 'Data tahfidz berhasil disimpan.');
     }
 
-    public function show(Tahfidz $tahfidz)
+    public function show(tahfidz $tahfidz)
     {
         return view('tahfidz.show', compact('tahfidz'));
     }
 
-    public function edit(Tahfidz $tahfidz)
+    public function edit(tahfidz $tahfidz)
     {
         return view('tahfidz.edit', compact('tahfidz'));
     }
 
-    public function update(Request $request, Tahfidz $tahfidz)
+    public function update(Request $request, tahfidz $tahfidz)
     {
         $request->validate([
             'jenis_tahfidz' => 'required|string',
@@ -85,7 +85,7 @@ class TahfidzController extends Controller
         return redirect()->route('tahfidz.index')->with('success', 'Data tahfidz berhasil diperbarui.');
     }
 
-    public function destroy(Tahfidz $tahfidz)
+    public function destroy(tahfidz $tahfidz)
     {
         $tahfidz->update(['deleted_by' => 1]);
         $tahfidz->delete();

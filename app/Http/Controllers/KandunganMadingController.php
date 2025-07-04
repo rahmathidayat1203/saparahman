@@ -65,7 +65,7 @@ class KandunganMadingController extends Controller
             'nama_pengampu' => 'required|string|max:255',
             'judul' => 'required|string|max:255',
             'pdf_file' => 'required|file|mimes:pdf|max:2048', // PDF wajib, maks 2MB
-            'png_file' => 'nullable|file|mimes:png|max:2048', // PNG opsional, maks 2MB
+            'png_file' => 'nullable', // PNG opsional, maks 2MB
             'desk' => 'required|string',
         ]);
 

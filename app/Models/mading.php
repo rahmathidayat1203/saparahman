@@ -17,8 +17,8 @@ class mading extends Model
     {
         return $this->belongsTo(KategoriMading::class, 'id_kategori_mading');
     }
-    public function asas()
-    {
-        return $this->belongsTo(MasterAsas::class, 'id_asas');
-    }
+    // public function asas()
+    // {
+    //     return $this->belongsTo(MasterAsas::class, 'id_asas');
+    // }
 }

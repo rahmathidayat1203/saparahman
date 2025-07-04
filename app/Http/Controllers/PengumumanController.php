@@ -56,7 +56,7 @@ class PengumumanController extends Controller
         $fileName = time() . '_' . $file->getClientOriginalName();
         $file->storeAs('public/pengumuman', $fileName);
 
-        Pengumuman::create([
+        pengumuman::create([
             'judul' => $request->judul,
             'desk' => $request->desk,
             'file' => $fileName,
@@ -66,17 +66,17 @@ class PengumumanController extends Controller
         return redirect()->route('pengumuman.index')->with('success', 'Pengumuman berhasil disimpan.');
     }
 
-    public function show(Pengumuman $pengumuman)
+    public function show(pengumuman $pengumuman)
     {
         return view('pengumuman.show', compact('pengumuman'));
     }
 
-    public function edit(Pengumuman $pengumuman)
+    public function edit(pengumuman $pengumuman)
     {
         return view('pengumuman.edit', compact('pengumuman'));
     }
 
-    public function update(Request $request, Pengumuman $pengumuman)
+    public function update(Request $request, pengumuman $pengumuman)
     {
         $request->validate([
             'judul' => 'required|string',
@@ -106,7 +106,7 @@ class PengumumanController extends Controller
         return redirect()->route('pengumuman.index')->with('success', 'Pengumuman berhasil diperbarui.');
     }
 
-    public function destroy(Pengumuman $pengumuman)
+    public function destroy(pengumuman $pengumuman)
     {
         if ($pengumuman->file && Storage::exists('public/pengumuman/' . $pengumuman->file)) {
             Storage::delete('public/pengumuman/' . $pengumuman->file);

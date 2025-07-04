@@ -76,7 +76,7 @@ class PeraturanController extends Controller
             }
 
             // Simpan data ke database
-            $peraturan = Peraturan::create([
+            $peraturan = peraturan::create([
                 'nama_peraturan' => $request->nama_peraturan,
                 'jenis_peraturan' => $request->jenis_peraturan,
                 'file' => $fileName,
@@ -86,7 +86,7 @@ class PeraturanController extends Controller
             ]);
 
             return redirect()->route('peraturan.index')
-                ->with('success', 'Peraturan "' . $request->nama_peraturan . '" berhasil disimpan.');
+                ->with('success', 'peraturan "' . $request->nama_peraturan . '" berhasil disimpan.');
         } catch (ValidationException $e) {
             // Tangani error validasi
             return back()
@@ -108,17 +108,17 @@ class PeraturanController extends Controller
         }
     }
 
-    public function show(Peraturan $peraturan)
+    public function show(peraturan $peraturan)
     {
         return view('peraturan.show', compact('peraturan'));
     }
 
-    public function edit(Peraturan $peraturan)
+    public function edit(peraturan $peraturan)
     {
         return view('peraturan.edit', compact('peraturan'));
     }
 
-    public function update(Request $request, Peraturan $peraturan)
+    public function update(Request $request, peraturan $peraturan)
     {
         $request->validate([
             'nama_peraturan' => 'required|string',
@@ -151,7 +151,7 @@ class PeraturanController extends Controller
         return redirect()->route('peraturan.index')->with('success', 'Peraturan berhasil diperbarui.');
     }
 
-    public function destroy(Peraturan $peraturan)
+    public function destroy(peraturan $peraturan)
     {
         if ($peraturan->file && Storage::exists('public/peraturans/' . $peraturan->file)) {
             Storage::delete('public/peraturans/' . $peraturan->file);
@@ -165,7 +165,7 @@ class PeraturanController extends Controller
     public function peraturan()
     {
         try {
-            $data = Peraturan::all(); // Ambil semua data dari tabel peraturan
+            $data = peraturan::all(); // Ambil semua data dari tabel peraturan
 
             return response()->json([
                 'success' => true,

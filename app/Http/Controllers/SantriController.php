@@ -7,6 +7,7 @@ use App\Models\Kelas;
 use App\Models\orang_tua;
 use App\Models\ortu_santri;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -19,6 +20,16 @@ class SantriController extends Controller
 
             return DataTables::of($santris)
                 ->addIndexColumn()
+                ->addColumn('foto', function ($row) {
+                    $url = asset('storage/' . $row->foto);
+                    return '<img src="' . $url . '" width="60" height="60" class="img-thumbnail rounded-circle" />';
+                })
+                ->addColumn('tingkatan', function ($row) {
+                    return $row->kelas->tingkatan;
+                })
+                ->addColumn('nama_kelas', function ($row) {
+                    return $row->kelas->nama_kelas;
+                })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="' . route('santri.edit', $row->id) . '" class="edit btn btn-primary btn-sm">Edit</a> ';
                     $btn .= '<form action="' . route('santri.destroy', $row->id) . '" method="POST" style="display:inline;">
@@ -27,12 +38,8 @@ class SantriController extends Controller
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin?\')">Hapus</button>
                             </form>';
                     return $btn;
-                })->addColumn('tingkatan', function ($row) {
-                    return $row->kelas->tingkatan;
-                })->addColumn('nama_kelas', function ($row) {
-                    return $row->kelas->nama_kelas;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'foto'])
                 ->make(true);
         }
 
@@ -55,10 +62,16 @@ class SantriController extends Controller
             'npsm' => 'required|string|max:50',
             'id_kelas' => 'required|exists:kelas,id',
             'gender' => 'required',
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $fotoPath = null;
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('foto-santri', 'public');
         }
 
         Santri::create([
@@ -69,7 +82,8 @@ class SantriController extends Controller
             'npsm' => $request->npsm,
             'id_kelas' => $request->id_kelas,
             'gender' => $request->gender,
-            'created_by' => 1, // Hardcode sementara
+            'foto' => $fotoPath,
+            'created_by' => 1,
         ]);
 
         return redirect()->route('santri.index')->with('success', 'Santri berhasil ditambahkan.');
@@ -96,10 +110,22 @@ class SantriController extends Controller
             'npsm' => 'required|string|max:50',
             'id_kelas' => 'required|exists:kelas,id',
             'gender' => 'required',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Handle foto jika diupload
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($santri->foto && Storage::disk('public')->exists($santri->foto)) {
+                Storage::disk('public')->delete($santri->foto);
+            }
+
+            $fotoPath = $request->file('foto')->store('foto-santri', 'public');
+            $santri->foto = $fotoPath;
         }
 
         $santri->update([
@@ -110,7 +136,8 @@ class SantriController extends Controller
             'npsm' => $request->npsm,
             'id_kelas' => $request->id_kelas,
             'gender' => $request->gender,
-            'updated_by' => 1, // Hardcode sementara
+            'foto' => $santri->foto,
+            'updated_by' => 1,
         ]);
 
         return redirect()->route('santri.index')->with('success', 'Santri berhasil diupdate.');
@@ -120,9 +147,9 @@ class SantriController extends Controller
     {
         try {
             $user = $request->user();
-            $ortu = orang_tua::where('no_telepon','=',$user->no_wa)->first();
+            $ortu = orang_tua::where('no_telepon', '=', $user->no_wa)->first();
             $santris = ortu_santri::where('id_ortu', $ortu->id)
-                ->with('santri.kelas') // eager load relasi kelas
+                ->with('santri.kelas')
                 ->get();
 
             $data = $santris->pluck('santri')->filter()->map(function ($santri) {
@@ -133,7 +160,8 @@ class SantriController extends Controller
                     'nsm' => $santri->nsm,
                     'npsm' => $santri->npsm,
                     'gender' => $santri->gender,
-                    'kelas' => $santri->kelas->nama_kelas ?? null, // ambil nama_kelas dari relasi kelas
+                    'kelas' => $santri->kelas->nama_kelas ?? null,
+                    'foto' => $santri->foto,
                     'createdBy' => $santri->created_by,
                     'updatedBy' => $santri->updated_by,
                     'deletedBy' => $santri->deleted_by,
@@ -143,22 +171,27 @@ class SantriController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Get santri success',
-                'data' => $data->values() // reset key jika perlu
+                'data' => $data->values()
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
                 'data' => null
-            ], 500); // 500 karena ini error server
+            ], 500);
         }
     }
 
     public function destroy(Santri $santri)
     {
+        if ($santri->foto && Storage::disk('public')->exists($santri->foto)) {
+            Storage::disk('public')->delete($santri->foto);
+        }
+
         $santri->update([
-            'deleted_by' => 1, // Hardcode sementara
+            'deleted_by' => 1,
         ]);
+
         $santri->delete();
 
         return redirect()->route('santri.index')->with('success', 'Santri berhasil dihapus.');

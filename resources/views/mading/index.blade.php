@@ -22,7 +22,7 @@
                                 <th>No</th>
                                 <th>Judul</th>
                                 <th>Kategori</th>
-                                <th>Asas</th>
+                                {{-- <th>Asas</th> --}}
                                 <th>Gambar</th>
                                 <th>Gambaran</th>
                                 <th>Aksi</th>
@@ -57,7 +57,7 @@
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 { data: 'judul', name: 'judul' },
                 { data: 'id_kategori_mading', name: 'id_kategori_mading' },
-                { data: 'id_asas', name: 'id_asas' },
+                // { data: 'id_asas', name: 'id_asas' },
                 { data: 'gambar', name: 'gambar' },
                 { 
                     data: 'gambaran_deskripsi', 

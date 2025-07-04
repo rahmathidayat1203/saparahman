@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama_ortu');
             $table->string('no_kk');
             $table->string('no_telepon');
+            $table->string('foto');
             $table->string('alamat');
             $table->string('pekerjaan');
             $table->unsignedBigInteger('created_by');

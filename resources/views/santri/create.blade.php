@@ -69,6 +69,10 @@
                                 </option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="foto">Foto Santri</label>
+                            <input type="file" class="form-control" name="foto" id="foto" accept="image/*">
+                        </div>
 
 
                         <button type="submit" class="btn btn-success me-2">

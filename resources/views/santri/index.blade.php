@@ -30,6 +30,7 @@
                                 <th>Tingkatan</th>
                                 <th>Nama Kelas</th>
                                 <th>Gender</th>
+                                <th>Foto</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -70,6 +71,7 @@
                 { data: 'tingkatan', name: 'tingkatan' },
                 { data: 'nama_kelas', name: 'nama_kelas' },
                 { data: 'gender', name: 'gender' },
+                { data: 'foto', name: 'foto', orderable: false, searchable: false },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ]
         });

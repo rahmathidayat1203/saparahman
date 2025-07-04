@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KategoriMading;
 use App\Models\mading;
+use App\Models\mading as ModelsMading;
 use App\Models\MasterAsas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,9 +23,9 @@ class MadingController extends Controller
                     $url = asset('storage/' . $row->gambar);
                     return '<img src="' . $url . '" width="80" height="60" style="object-fit:cover;" />';
                 })
-                ->addColumn('id_asas', function ($row) {
-                    return $row->asas ? $row->asas->nama_asas : '-';
-                })
+                // ->addColumn('id_asas', function ($row) {
+                //     return $row->asas ? $row->asas->nama_asas : '-';
+                // })
                 ->addColumn('id_kategori_mading', function ($row) {
                     return $row->kategori ? $row->kategori->kategori : '-';
                 })
@@ -100,7 +101,7 @@ class MadingController extends Controller
                         'judul' => $item->judul,
                         'gambar' => $item->gambar,
                         'gambaran_deskripsi' => $item->gambaran_deskripsi,
-                        'asas' => $item->asas->nama_asas,
+                        // 'asas' => $item->asas->nama_asas,
                         'created_by' => $item->created_by,
                         'created_at' => $item->created_at,
                     ];
@@ -124,17 +125,17 @@ class MadingController extends Controller
     public function create()
     {
         $kategoriMadings = KategoriMading::all();
-        $asass = MasterAsas::all();
-        return view('mading.create', compact('kategoriMadings', 'asass'));
+        // $asass = MasterAsas::all();
+        return view('mading.create', compact('kategoriMadings'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'id_kategori_mading' => 'required',
-            'id_asas' => 'required|exists:master_asas,id',
+            // 'id_asas' => 'required|exists:master_asas,id',
             'judul' => 'required',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'gambar' => 'required',
             'gambaran_deskripsi' => 'required|string',
         ]);
 
@@ -150,22 +151,22 @@ class MadingController extends Controller
     }
 
 
-    public function edit(Mading $mading)
+    public function edit(mading $mading)
     {
         $kategoriList = KategoriMading::all();
-        $asass = MasterAsas::all();
-        return view('mading.edit', compact('mading', 'kategoriList', 'asass'));
+        // $asass = MasterAsas::all();
+        return view('mading.edit', compact('mading', 'kategoriList'));
     }
 
-    public function update(Request $request, Mading $mading)
+    public function update(Request $request, mading $mading)
     {
         // dd($request->all());
         $validated = $request->validate([
             'id_kategori_mading' => 'required',
-            'id_asas' => 'required|exists:master_asas,id',
+            // 'id_asas' => 'required|exists:master_asas,id',
             'judul' => 'required',
             'gambaran_deskripsi' => 'required',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'gambar' => 'nullable|image',
         ]);
 
         // Upload gambar baru jika ada

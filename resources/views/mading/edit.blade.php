@@ -38,7 +38,7 @@
                         @enderror
                     </div>  
 
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="id_asas">Asas</label>
                         <select class="form-control @error('id_asas') is-invalid @enderror" id="id_asas" name="id_asas" required>
                             <option value="">Pilih Asas</option>
@@ -51,7 +51,7 @@
                         @error('id_asas')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div> 
+                    </div>  --}}
 
                     <div class="form-group">
                         <label for="judul">Judul</label>

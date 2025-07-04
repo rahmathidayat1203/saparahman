@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,15 +13,15 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        // for ($i=0; $i < 15; $i++) { 
-        //     User::create([
-        //         'nama_admin'  => 'admin' . $i,
-        //         'username' => "adminihboss",
-        //         'email' => "adminbos@gmail.com",
-        //         'password' => "Adm123*",
-        //         'created_by' => "1"
-        //     ]);
-        // }
+        for ($i=0; $i < 15; $i++) { 
+            Admin::create([
+                'nama_admin'  => 'admin' . $i,
+                'username' => "adminihboss",
+                'email' => "adminbos@gmail.com",
+                'password' => "Adm123*",
+                'created_by' => "1"
+            ]);
+        }
 
     }
 }

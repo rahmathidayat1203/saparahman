@@ -68,5 +68,4 @@ Route::get('/kandungan-mading', [KandunganMadingController::class, 'kandungan_ma
 Route::get('/kandungan_mading_by_asas', [KandunganMadingController::class, 'kandungan_mading_by_asas']);
 Route::get('mading_by_id/{id}',[MadingController::class,'mading_by_id']);
 
-use App\Http\Controllers\FirebaseController;
-Route::middleware('auth')->get('/generate-firebase-token', [FirebaseController::class, 'generateFirebaseToken']);
+Route::post('update-profile-base64', [AuthController::class, 'update_foto_profile_base64'])->middleware('auth:sanctum');
