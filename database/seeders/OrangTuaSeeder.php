@@ -13,14 +13,16 @@ class OrangTuaSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i=0; $i < 15; $i++) { 
+        for ($i = 0; $i < 15; $i++) {
             orang_tua::create([
-                'nama_ortu'  => 'Dewi Laeli' . $i,
-                'no_kk' => "31740758060003",
-                'no_telepon' => "085174188759",
-                'alamat' => "Jalan Sentosa Lorong Asli II RT.015 RW. 004",
-                'pekerjaan' => "Wirausaha",
-                'created_by' => "1"
+                'nama_ortu'    => 'Dewi Laeli' . $i,
+                'no_kk'        => '31740758060003',
+                'no_telepon'   => '085174188759',
+                'alamat'       => 'Jalan Sentosa Lorong Asli II RT.015 RW. 004',
+                'pekerjaan'    => 'Wirausaha',
+                'foto'         => 'default.jpg',  // wajib jika field tidak nullable
+                'created_by'   => 1,
+                'updated_by'   => 1,
             ]);
         }
     }

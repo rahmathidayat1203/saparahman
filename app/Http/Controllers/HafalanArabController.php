@@ -8,6 +8,7 @@ use App\Models\Arab;
 use App\Models\orang_tua;
 use App\Models\ortu_santri;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
 class HafalanArabController extends Controller
@@ -122,6 +123,7 @@ class HafalanArabController extends Controller
                 'data' => $data
             ], 200);
         } catch (\Exception $e) {
+            Log::info("errors: ".json_encode($e->getMessage()));
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
